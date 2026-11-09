@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Paper Trading Bot — Fake Money Only</title>
+<style>
+:root {
+  --bg: #0b1220;
+  --card: #121a2b;
+  --card2: #182338;
+  --line: #243049;
+  --text: #e8eefc;
+  --muted: #93a0b8;
+  --accent: #5b8cff;
+  --accent2: #22d3a6;
+  --warn: #f5a524;
+  --bad: #ff6b7a;
+  --good: #3ddc97;
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+  --radius: 16px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: radial-gradient(1200px 600px at 10% -10%, #1a2744 0%, var(--bg) 55%);
+  color: var(--text);
+  line-height: 1.45;
+  min-height: 100vh;
+}
+.wrap { max-width: 1080px; margin: 0 auto; padding: 16px 14px 40px; }
+.banner {
+  background: linear-gradient(90deg, #5a1d2a, #7a3b12);
+  border: 1px solid #a35a3a;
+  color: #ffe8d6;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  text-align: center;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+}
+header {
+  display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end;
+  justify-content: space-between; margin: 8px 0 14px;
+}
+h1 { margin: 0; font-size: 1.45rem; }
+.subhead { color: var(--muted); font-size: .92rem; }
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--card2); border: 1px solid var(--line);
+  padding: 6px 10px; border-radius: 999px; font-size: .82rem; color: var(--muted);
+}
+.pill.live-on { border-color: rgba(34,211,166,.55); color: #b7ffe6; }
+.pill.live-off { border-color: rgba(255,107,122,.45); color: #ffc2c8; }
+.dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--accent2);
+  box-shadow: 0 0 0 3px rgba(34,211,166,.2);
+}
+.pill.live-on .dot {
+  background: var(--good);
+  animation: pulse 1.2s ease-in-out infinite;
+  box-shadow: 0 0 0 0 rgba(61,220,151,.55);
+}
+.pill.live-off .dot { background: var(--bad); animation: none; }
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(61,220,151,.55); }
+  70% { box-shadow: 0 0 0 8px rgba(61,220,151,0); }
+  100% { box-shadow: 0 0 0 0 rgba(61,220,151,0); }
+}
+.ticker {
+  display: flex; gap: 8px; overflow-x: auto; padding: 4px 0 12px;
+  -webkit-overflow-scrolling: touch;
+}
+.ticker-item {
+  flex: 0 0 auto;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 8px 12px;
+  min-width: 110px;
+  transition: border-color .2s, background .2s;
+}
+.ticker-item.tick-up { border-color: rgba(61,220,151,.5); }
+.ticker-item.tick-down { border-color: rgba(255,107,122,.5); }
+.ticker-item .t-sym { font-size: .72rem; color: var(--muted); letter-spacing: .04em; }
+.ticker-item .t-price { font-weight: 700; font-size: 1rem; margin-top: 2px; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+@media (min-width: 720px) {
+  .grid { grid-template-columns: repeat(3, 1fr); }
+  .grid.six { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 960px) {
+  .grid.six { grid-template-columns: repeat(6, 1fr); }
+}
+.card {
+  background: linear-gradient(180deg, var(--card) 0%, var(--card2) 100%);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px;
+  box-shadow: var(--shadow);
+}
+.card.live-equity {
+  border-color: rgba(91,140,255,.55);
+  background: linear-gradient(180deg, #152246 0%, #121a2b 100%);
+}
+.card .label { color: var(--muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; }
+.card .value { font-size: 1.35rem; font-weight: 700; margin-top: 4px; }
+.section { margin-top: 18px; }
+.section h2 {
+  margin: 0 0 10px; font-size: 1.05rem;
+  display: flex; align-items: center; gap: 8px;
+}
+.section h2::before {
+  content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--accent);
+}
+.funnel { display: flex; flex-direction: column; gap: 10px; }
+.funnel-row {
+  display: grid; grid-template-columns: 64px 1fr; gap: 8px 12px; align-items: center;
+}
+@media (min-width: 640px) {
+  .funnel-row { grid-template-columns: 72px minmax(120px, 1fr) 1.2fr; }
+}
+.funnel-step {
+  font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em;
+}
+.funnel-bar-wrap {
+  background: #0a101c; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; height: 34px;
+}
+.funnel-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #3b6ef5, #22d3a6);
+  display: flex; align-items: center; justify-content: flex-end; padding: 0 10px;
+  min-width: 48px; transition: width .4s ease;
+}
+.funnel-num { font-weight: 800; font-size: .95rem; }
+.funnel-meta { display: flex; flex-direction: column; gap: 2px; font-size: .9rem; }
+.funnel-meta span { color: var(--muted); font-size: .78rem; }
+table {
+  width: 100%; border-collapse: collapse; font-size: .88rem;
+  display: block; overflow-x: auto; white-space: nowrap;
+  background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+}
+thead { background: #0e1626; }
+th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; }
+tbody tr:last-child td { border-bottom: none; }
+.sub { color: var(--muted); font-size: .72rem; margin-top: 2px; }
+.reason { white-space: normal; max-width: 280px; color: var(--muted); font-size: .8rem; }
+.pos { color: var(--good); }
+.neg { color: var(--bad); }
+.muted { color: var(--muted); }
+.live-price { font-weight: 700; font-variant-numeric: tabular-nums; transition: background .25s; }
+.flash-up { animation: flashUp .45s ease; }
+.flash-down { animation: flashDown .45s ease; }
+@keyframes flashUp {
+  0% { background: rgba(61,220,151,.35); }
+  100% { background: transparent; }
+}
+@keyframes flashDown {
+  0% { background: rgba(255,107,122,.35); }
+  100% { background: transparent; }
+}
+.progress-cell { min-width: 140px; white-space: normal; }
+.prog-wrap {
+  position: relative; height: 10px; border-radius: 999px;
+  background: #0a101c; border: 1px solid var(--line); overflow: visible; margin-top: 4px;
+}
+.prog-bar {
+  height: 100%; border-radius: 999px;
+  background: linear-gradient(90deg, var(--bad), var(--warn), var(--good));
+  width: 0%; transition: width .4s ease;
+}
+.prog-bar.near-tp { box-shadow: 0 0 8px rgba(61,220,151,.5); }
+.prog-bar.near-sl { box-shadow: 0 0 8px rgba(255,107,122,.5); }
+.prog-markers {
+  position: absolute; inset: 0; pointer-events: none;
+}
+.prog-markers span {
+  position: absolute; top: -14px; font-size: .6rem; color: var(--muted);
+  transform: translateX(-50%);
+}
+.m-sl { left: 0; transform: none; }
+.m-tp { right: 0; left: auto; transform: none; }
+.m-entry { left: 50%; color: var(--accent); }
+.badge {
+  display: inline-block; font-size: .65rem; padding: 2px 6px; border-radius: 999px;
+  background: #2a1840; color: #d7b3ff; border: 1px solid #5a3a88; margin-left: 4px;
+  vertical-align: middle;
+}
+.rules {
+  background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+  padding: 14px 16px; color: var(--text);
+}
+.rules ol { margin: 8px 0 0 18px; padding: 0; }
+.rules li { margin: 6px 0; color: var(--muted); }
+.rules strong { color: var(--text); }
+.empty { color: var(--muted); padding: 8px 2px; }
+footer {
+  margin-top: 22px; color: var(--muted); font-size: .8rem; text-align: center;
+}
+.note {
+  margin-top: 10px; padding: 10px 12px; border-radius: 10px;
+  background: rgba(245,165,36,.08); border: 1px solid rgba(245,165,36,.35);
+  color: #ffd89a; font-size: .85rem;
+}
+.live-meta { color: var(--muted); font-size: .78rem; margin-top: 6px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="banner">FAKE MONEY ONLY — no profit promised</div>
+
+    <header>
+      <div>
+        <h1>Paper Trading Bot</h1>
+        <div class="subhead">Volume scanner · News reader · Price-level picker · Live prices</div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:6px; align-items:flex-end;">
+        <div class="pill live-off" id="live-pill">
+          <span class="dot"></span>
+          <strong>LIVE</strong>
+          <span id="live-tick-time">connecting…</span>
+        </div>
+        <div class="pill"><span class="dot" style="animation:none;background:var(--accent)"></span> Scan data: 2026-11-09 12:05:49 Africa/Lagos</div>
+      </div>
+    </header>
+
+    <div class="ticker" id="live-ticker" aria-label="Live market ticker">
+      <div class="ticker-item" data-ticker="BTCUSDT"><div class="t-sym">BTC</div><div class="t-price">—</div></div>
+      <div class="ticker-item" data-ticker="ETHUSDT"><div class="t-sym">ETH</div><div class="t-price">—</div></div>
+      <div class="ticker-item" data-ticker="SOLUSDT"><div class="t-sym">SOL</div><div class="t-price">—</div></div>
+      <div class="ticker-item" data-ticker="DOGEUSDT"><div class="t-sym">DOGE</div><div class="t-price">—</div></div>
+      <div class="ticker-item" data-ticker="PEPEUSDT"><div class="t-sym">PEPE</div><div class="t-price">—</div></div>
+    </div>
+
+    <div class="grid six">
+      <div class="card live-equity">
+        <div class="label">Live fake equity</div>
+        <div class="value" id="live-equity">$1,010.19</div>
+      </div>
+      <div class="card">
+        <div class="label">Unrealized P&amp;L</div>
+        <div class="value muted" id="live-unrealized">—</div>
+      </div>
+      <div class="card">
+        <div class="label">Open (mark-to-market)</div>
+        <div class="value" id="live-open-mtm">$564.21</div>
+      </div>
+      <div class="card">
+        <div class="label">Cash (free)</div>
+        <div class="value">$445.98</div>
+      </div>
+      <div class="card">
+        <div class="label">Starting wallet</div>
+        <div class="value">$1,000.00</div>
+      </div>
+      <div class="card">
+        <div class="label">Realized P&amp;L</div>
+        <div class="value pos">$10.19</div>
+      </div>
+    </div>
+
+    <div class="note">
+      Exchange this run: <strong>binance</strong>
+      · Open: <strong>8</strong>
+      · Closed: <strong>1</strong>
+      · Prices refresh about every 3 seconds.
+      · Page reloads every 5 minutes for new scans.
+      <div class="live-meta">Source: <span id="live-endpoint">—</span> · Clock: <span id="live-clock">—</span></div>
+    </div>
+
+    <section class="section card">
+      <h2>How a scan narrows down</h2>
+      <div class="funnel"><div class="funnel-row"><div class="funnel-step">Step 1</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:100%"><span class="funnel-num">277</span></div></div><div class="funnel-meta"><strong>Liquid USDT pairs</strong><span>Above the $500k volume floor</span></div></div><div class="funnel-row"><div class="funnel-step">Step 2</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:21%"><span class="funnel-num">60</span></div></div><div class="funnel-meta"><strong>Deep-scanned</strong><span>Top 60 by liquidity</span></div></div><div class="funnel-row"><div class="funnel-step">Step 3</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:18%"><span class="funnel-num">47</span></div></div><div class="funnel-meta"><strong>Volume spikes</strong><span>≥ 1.8× recent average</span></div></div><div class="funnel-row"><div class="funnel-step">Step 4</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:18%"><span class="funnel-num">5</span></div></div><div class="funnel-meta"><strong>Memes deep-scanned</strong><span>DOGE, SHIB, PEPE-style tagged</span></div></div><div class="funnel-row"><div class="funnel-step">Step 5</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:18%"><span class="funnel-num">6</span></div></div><div class="funnel-meta"><strong>Fake trades opened</strong><span>Spike + news OK + near support</span></div></div></div>
+    </section>
+
+    <section class="section">
+      <h2>Open fake trades (live)</h2>
+      <table id='open-trades-table'><thead><tr><th>Coin</th><th>Entry</th><th>Live</th><th>Unrealized</th><th>SL → TP</th><th>Stop-loss</th><th>Take-profit</th><th>Size</th><th>Reason</th></tr></thead><tbody><tr data-trade-id='2'><td><strong>PAXG</strong><div class='sub'>PAXG/USDT</div></td><td>4,083.41</td><td class='live-price' data-role='live'>—</td><td class='live-pnl' data-role='pnl'><div class='pnl-usd'>—</div><div class='pnl-pct sub'>—</div></td><td class='progress-cell' data-role='progress'><div class='prog-wrap'><div class='prog-bar' style='width:0%'></div><div class='prog-markers'><span class='m-sl'>SL</span><span class='m-entry'>E</span><span class='m-tp'>TP</span></div></div><div class='prog-label sub'>—</div></td><td class='neg'>3,960.91</td><td class='pos'>4,123.68</td><td>$90.00</td><td class='reason'>vol_ratio=3.94x; news=neutral (no news); support=4050.516; meme=False</td></tr><tr data-trade-id='3'><td><strong>ASTER</strong><div class='sub'>ASTER/USDT</div></td><td>0.6326</td><td class='live-price' data-role='live'>—</td><td class='live-pnl' data-role='pnl'><div class='pnl-usd'>—</div><div class='pnl-pct sub'>—</div></td><td class='progress-cell' data-role='progress'><div class='prog-wrap'><div class='prog-bar' style='width:0%'></div><div class='prog-markers'><span class='m-sl'>SL</span><span class='m-entry'>E</span><span class='m-tp'>TP</span></div></div><div class='prog-label sub'>—</div></td><td class='neg'>0.613622</td><td class='pos'>0.6499</td><td>$81.00</td><td class='reason'>vol_ratio=3.1x; news=neutral (no news); support=0.6308; meme=False</td></tr><tr data-trade-id='4'><td><strong>NXPC</strong><div class='sub'>NXPC/USDT</div></td><td>0.1538</td><td class='live-price' data-role='live'>—</td><td class='live-pnl' data-role='pnl'><div class='pnl-usd'>—</div><div class='pnl-pct sub'>—</div></td><td class='progress-cell' data-role='progress'><div class='prog-wrap'><div class='prog-bar' style='width:0%'></div><div class='prog-markers'><span class='m-sl'>SL</span><span class='m-entry'>E</span><span class='m-tp'>TP</span></div></div><div class='prog-label sub'>—</div></td><td class='neg'>0.149186</td><td class='pos'>0.15413333</td><td>$83.92</td><td class='reason'>vol_ratio=39.63x; news=neutral (no news); support=0.1534; meme=False</td></tr><tr data-trade-id='5'><td><strong>NEIRO</strong> <span class="badge meme">MEME</span><div class='sub'>NEIRO/USDT</div></td><td>0.0000593</td><td class='live-price' data-role='live'>—</td><td class='live-pnl' data-role='pnl'><div class='pnl-usd'>—</div><div class='pnl-pct sub'>—</div></td><td class='progress-cell' data-role='progress'><div class='prog-wrap'><div class='prog-bar' style='width:0%'></div><div class='prog-markers'><span class='m-sl'>SL</span><span class='m-entry'>E</span><span class='m-tp'>TP</span></div></div><div class='prog-label sub'>—</div></td><td class='neg'>0.00005752</td><td class='pos'>0.00005968</td><td>$75.53</td><td class='reason'>vol_ratio=18.03x; news=neutral (no news); support=5.901e-05; meme=True</td></tr><tr data-trade-id='6'><td><strong>BNCB</strong><div class='sub'>BNCB/USDT</div></td><td>4.7700</td><td class='live-price' data-role='live'>—</td><td class='live-pnl' data-role='pnl'><div class='pnl-usd'>—</div><div class='pnl-pct sub'>—</div></td><td class='progress-cell' data-role='progress'><div class='prog-wrap'><div class='prog-bar' style='width:0%'></div><div class='prog-markers'><span class='m-sl'>SL</span><span class='m-entry'>E</span><span class='m-tp'>TP</span></div></div><div class='prog-label sub'>—</div></td><td class='neg'>4.6269</td><td class='pos'>4.8100</td><td>$67.97</td><td class='reason'>vol_ratio=7.89x; news=neutral (no news); support=4.76; meme=False</td></tr><tr data-trade-id='7'><td><strong>ETH</strong><div class='sub'>ETH/USDT</div></td><td>2,107.16</td><td class='live-price' data-role='live'>—</td><td class='live-pnl' data-role='pnl'><div class='pnl-usd'>—</div><div class='pnl-pct sub'>—</div></td><td class='progress-cell' data-role='progress'><div class='prog-wrap'><div class='prog-bar' style='width:0%'></div><div class='prog-markers'><span class='m-sl'>SL</span><span class='m-entry'>E</span><span class='m-tp'>TP</span></div></div><div class='prog-label sub'>—</div></td><td class='neg'>2,043.95</td><td class='pos'>2,128.40</td><td>$61.18</td><td class='reason'>vol_ratio=5.96x; news=neutral; support=2083.1; meme=False</td></tr><tr data-trade-id='8'><td><strong>DOGE</strong> <span class="badge meme">MEME</span><div class='sub'>DOGE/USDT</div></td><td>0.06869</td><td class='live-price' data-role='live'>—</td><td class='live-pnl' data-role='pnl'><div class='pnl-usd'>—</div><div class='pnl-pct sub'>—</div></td><td class='progress-cell' data-role='progress'><div class='prog-wrap'><div class='prog-bar' style='width:0%'></div><div class='prog-markers'><span class='m-sl'>SL</span><span class='m-entry'>E</span><span class='m-tp'>TP</span></div></div><div class='prog-label sub'>—</div></td><td class='neg'>0.0666293</td><td class='pos'>0.06965</td><td>$55.06</td><td class='reason'>vol_ratio=4.19x; news=neutral (no news); support=0.06796; meme=True</td></tr><tr data-trade-id='9'><td><strong>PEPE</strong> <span class="badge meme">MEME</span><div class='sub'>PEPE/USDT</div></td><td>0.00000506</td><td class='live-price' data-role='live'>—</td><td class='live-pnl' data-role='pnl'><div class='pnl-usd'>—</div><div class='pnl-pct sub'>—</div></td><td class='progress-cell' data-role='progress'><div class='prog-wrap'><div class='prog-bar' style='width:0%'></div><div class='prog-markers'><span class='m-sl'>SL</span><span class='m-entry'>E</span><span class='m-tp'>TP</span></div></div><div class='prog-label sub'>—</div></td><td class='neg'>0.00000491</td><td class='pos'>0.00000511</td><td>$49.55</td><td class='reason'>vol_ratio=3.95x; news=neutral (no news); support=5.01e-06; meme=True</td></tr></tbody></table>
+    </section>
+
+    <section class="section">
+      <h2>Closed fake trades</h2>
+      <table><thead><tr><th>Coin</th><th>Entry</th><th>Exit</th><th>Size</th><th>P&amp;L $</th><th>P&amp;L %</th><th>Close reason</th></tr></thead><tbody><tr><td><strong>NXPC</strong><div class='sub'>NXPC/USDT</div></td><td>0.1393</td><td>0.1535</td><td>$100.00</td><td class='pos'>$10.19</td><td class='pos'>+10.19%</td><td class='reason'>take_profit</td></tr></tbody></table>
+    </section>
+
+    <section class="section">
+      <h2>Rules in plain English</h2>
+      <div class="rules">
+        <p>The bot only “buys” with <strong>pretend money</strong>. A coin must pass all three checks:</p>
+        <ol>
+          <li><strong>Volume spike</strong> — trading volume jumps to about <strong>1.8×</strong> its recent average (dead coins are skipped).</li>
+          <li><strong>News not bad</strong> — free RSS headlines are scanned; if the news looks negative (hack, ban, crash…), that coin is skipped.</li>
+          <li><strong>Near support</strong> — price is sitting near a recent swing-low support level.</li>
+        </ol>
+        <p style="margin-top:10px">
+          Wallet starts at <strong>$1,000.00</strong>.
+          Each new fake trade uses about <strong>10%</strong> of free cash.
+          It aims to take profit around <strong>+6%</strong> or cut the loss around <strong>−3%</strong>.
+          Meme coins are included when they look liquid enough.
+        </p>
+        <p style="margin-top:8px"><strong>This is for learning only. Fake results are not a promise of real profit.</strong></p>
+      </div>
+    </section>
+
+    <footer>
+      Built from <code>data/summary.txt</code> + <code>data/trades.csv</code> + <code>config.py</code>.
+      Live prices from public Binance market data. Page regenerates after each bot run.
+    </footer>
+  </div>
+  <script>
+    window.__OPEN_TRADES__ = [{"id":"2","symbol":"PAXG/USDT","base":"PAXG","binance":"PAXGUSDT","entry":4083.41,"stop_loss":3960.9077,"take_profit":4123.68,"qty":0.0220404,"notional":90.0,"meme":false,"reason":"vol_ratio=3.94x; news=neutral (no news); support=4050.516; meme=False"},{"id":"3","symbol":"ASTER/USDT","base":"ASTER","binance":"ASTERUSDT","entry":0.6326,"stop_loss":0.613622,"take_profit":0.6499,"qty":128.04299715,"notional":81.0,"meme":false,"reason":"vol_ratio=3.1x; news=neutral (no news); support=0.6308; meme=False"},{"id":"4","symbol":"NXPC/USDT","base":"NXPC","binance":"NXPCUSDT","entry":0.1538,"stop_loss":0.149186,"take_profit":0.15413333,"qty":545.64369311,"notional":83.92,"meme":false,"reason":"vol_ratio=39.63x; news=neutral (no news); support=0.1534; meme=False"},{"id":"5","symbol":"NEIRO/USDT","base":"NEIRO","binance":"NEIROUSDT","entry":5.93e-05,"stop_loss":5.752e-05,"take_profit":5.968e-05,"qty":1273693.08600337,"notional":75.53,"meme":true,"reason":"vol_ratio=18.03x; news=neutral (no news); support=5.901e-05; meme=True"},{"id":"6","symbol":"BNCB/USDT","base":"BNCB","binance":"BNCBUSDT","entry":4.77,"stop_loss":4.6269,"take_profit":4.81,"qty":14.24947589,"notional":67.97,"meme":false,"reason":"vol_ratio=7.89x; news=neutral (no news); support=4.76; meme=False"},{"id":"7","symbol":"ETH/USDT","base":"ETH","binance":"ETHUSDT","entry":2107.16,"stop_loss":2043.9452,"take_profit":2128.4,"qty":0.02903434,"notional":61.18,"meme":false,"reason":"vol_ratio=5.96x; news=neutral; support=2083.1; meme=False"},{"id":"8","symbol":"DOGE/USDT","base":"DOGE","binance":"DOGEUSDT","entry":0.06869,"stop_loss":0.0666293,"take_profit":0.06965,"qty":801.57228126,"notional":55.06,"meme":true,"reason":"vol_ratio=4.19x; news=neutral (no news); support=0.06796; meme=True"},{"id":"9","symbol":"PEPE/USDT","base":"PEPE","binance":"PEPEUSDT","entry":5.06e-06,"stop_loss":4.91e-06,"take_profit":5.11e-06,"qty":9792490.11857707,"notional":49.55,"meme":true,"reason":"vol_ratio=3.95x; news=neutral (no news); support=5.01e-06; meme=True"}];
+    window.__CASH__ = 445.98;
+    window.__REALIZED__ = 10.19;
+    window.__STARTING__ = 1000.0;
+  </script>
+  
+<script>
+(function () {
+  const trades = window.__OPEN_TRADES__ || [];
+  const cash = Number(window.__CASH__ || 0);
+  const realized = Number(window.__REALIZED__ || 0);
+  const TICKER = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "DOGEUSDT", "PEPEUSDT"];
+  const PRIMARY = "https://api.binance.com/api/v3/ticker/price";
+  const FALLBACK = "https://data-api.binance.vision/api/v3/ticker/price";
+  const POLL_MS = 3000;
+  const RELOAD_MS = 5 * 60 * 1000;
+
+  const lastPrices = {};
+  let endpointUsed = "—";
+  let mode = "rest"; // rest | ws
+  let pollTimer = null;
+
+  function fmtPrice(n) {
+    n = Number(n);
+    if (!isFinite(n)) return "—";
+    if (n >= 100) return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (n >= 1) return n.toFixed(4);
+    const s = n.toFixed(8).replace(/0+$/, "").replace(/\.$/, "");
+    return s || "0";
+  }
+  function fmtMoney(n) {
+    n = Number(n);
+    if (!isFinite(n)) return "—";
+    const sign = n < 0 ? "-" : "";
+    return sign + "$" + Math.abs(n).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function fmtPct(n) {
+    n = Number(n);
+    if (!isFinite(n)) return "—";
+    const sign = n > 0 ? "+" : "";
+    return sign + n.toFixed(2) + "%";
+  }
+  function lagosNow() {
+    try {
+      return new Intl.DateTimeFormat("en-GB", {
+        timeZone: "Africa/Lagos",
+        year: "numeric", month: "2-digit", day: "2-digit",
+        hour: "2-digit", minute: "2-digit", second: "2-digit",
+        hour12: false
+      }).format(new Date()).replace(",", "") + " Africa/Lagos";
+    } catch (e) {
+      return new Date().toISOString();
+    }
+  }
+
+  function setLiveStatus(ok, detail) {
+    const pill = document.getElementById("live-pill");
+    const tick = document.getElementById("live-tick-time");
+    const ep = document.getElementById("live-endpoint");
+    if (tick) tick.textContent = lagosNow();
+    if (ep) ep.textContent = detail || endpointUsed;
+    if (pill) {
+      pill.classList.toggle("live-on", !!ok);
+      pill.classList.toggle("live-off", !ok);
+    }
+  }
+
+  function flashEl(el, up) {
+    if (!el) return;
+    el.classList.remove("flash-up", "flash-down");
+    void el.offsetWidth;
+    el.classList.add(up ? "flash-up" : "flash-down");
+  }
+
+  function updateTradeRow(t, price) {
+    const row = document.querySelector('tr[data-trade-id="' + t.id + '"]');
+    if (!row) return;
+    const liveEl = row.querySelector('[data-role="live"]');
+    const pnlEl = row.querySelector('[data-role="pnl"]');
+    const progCell = row.querySelector('[data-role="progress"]');
+    const prev = lastPrices[t.binance];
+    if (liveEl) {
+      liveEl.textContent = fmtPrice(price);
+      if (prev != null && price !== prev) {
+        const up = price > prev;
+        liveEl.classList.toggle("pos", up);
+        liveEl.classList.toggle("neg", !up);
+        flashEl(liveEl, up);
+      }
+    }
+    const cost = t.entry * t.qty;
+    const value = price * t.qty;
+    const pnl = value - cost;
+    const pct = cost > 0 ? (pnl / cost) * 100 : 0;
+    if (pnlEl) {
+      const usd = pnlEl.querySelector(".pnl-usd");
+      const pp = pnlEl.querySelector(".pnl-pct");
+      if (usd) usd.textContent = fmtMoney(pnl);
+      if (pp) pp.textContent = fmtPct(pct);
+      pnlEl.classList.toggle("pos", pnl > 0);
+      pnlEl.classList.toggle("neg", pnl < 0);
+    }
+    // Progress between SL and TP
+    const lo = Math.min(t.stop_loss, t.take_profit);
+    const hi = Math.max(t.stop_loss, t.take_profit);
+    let pctBar = 0;
+    if (hi > lo) pctBar = ((price - lo) / (hi - lo)) * 100;
+    pctBar = Math.max(0, Math.min(100, pctBar));
+    let entryPct = 0;
+    if (hi > lo) entryPct = ((t.entry - lo) / (hi - lo)) * 100;
+    entryPct = Math.max(0, Math.min(100, entryPct));
+    if (progCell) {
+      const bar = progCell.querySelector(".prog-bar");
+      const label = progCell.querySelector(".prog-label");
+      const entryMark = progCell.querySelector(".m-entry");
+      if (bar) {
+        bar.style.width = pctBar.toFixed(1) + "%";
+        bar.classList.toggle("near-tp", pctBar >= 80);
+        bar.classList.toggle("near-sl", pctBar <= 20);
+      }
+      if (entryMark) entryMark.style.left = entryPct.toFixed(1) + "%";
+      if (label) {
+        let state = "between SL and TP";
+        if (price >= t.take_profit) state = "at / past take-profit";
+        else if (price <= t.stop_loss) state = "at / past stop-loss";
+        label.textContent = pctBar.toFixed(0) + "% toward TP · " + state;
+      }
+    }
+    return pnl;
+  }
+
+  function updateTicker(prices) {
+    TICKER.forEach(function (sym) {
+      const el = document.querySelector('[data-ticker="' + sym + '"]');
+      if (!el || prices[sym] == null) return;
+      const price = prices[sym];
+      const prev = lastPrices[sym];
+      const priceEl = el.querySelector(".t-price");
+      if (priceEl) {
+        priceEl.textContent = fmtPrice(price);
+        if (prev != null && price !== prev) {
+          const up = price > prev;
+          priceEl.classList.toggle("pos", up);
+          priceEl.classList.toggle("neg", !up);
+          flashEl(priceEl, up);
+          el.classList.toggle("tick-up", up);
+          el.classList.toggle("tick-down", !up);
+        }
+      }
+    });
+  }
+
+  function applyPrices(prices) {
+    let unreal = 0;
+    trades.forEach(function (t) {
+      const p = prices[t.binance];
+      if (p == null) return;
+      unreal += updateTradeRow(t, p);
+    });
+    updateTicker(prices);
+    Object.keys(prices).forEach(function (k) { lastPrices[k] = prices[k]; });
+
+    // Cash already had open notional deducted at entry; realized is already in cash when closed.
+    // Live equity = free cash + mark-to-market value of open positions.
+    const openCost = trades.reduce(function (s, t) { return s + (t.notional || (t.entry * t.qty) || 0); }, 0);
+    const openMtm = openCost + unreal;
+    const liveEquity = cash + openMtm;
+
+    const eqEl = document.getElementById("live-equity");
+    const unEl = document.getElementById("live-unrealized");
+    const mtmEl = document.getElementById("live-open-mtm");
+    if (eqEl) {
+      eqEl.textContent = fmtMoney(liveEquity);
+      eqEl.classList.toggle("pos", liveEquity > (window.__STARTING__ || 1000));
+      eqEl.classList.toggle("neg", liveEquity < (window.__STARTING__ || 1000));
+    }
+    if (unEl) {
+      unEl.textContent = fmtMoney(unreal);
+      unEl.classList.toggle("pos", unreal > 0);
+      unEl.classList.toggle("neg", unreal < 0);
+    }
+    if (mtmEl) mtmEl.textContent = fmtMoney(openMtm);
+    setLiveStatus(true, endpointUsed + " · " + mode);
+  }
+
+  function symbolsNeeded() {
+    const set = {};
+    trades.forEach(function (t) { if (t.binance) set[t.binance] = true; });
+    TICKER.forEach(function (s) { set[s] = true; });
+    return Object.keys(set);
+  }
+
+  async function fetchRest(base) {
+    const syms = symbolsNeeded();
+    if (!syms.length) return {};
+    const q = encodeURIComponent(JSON.stringify(syms));
+    const url = base + "?symbols=" + q;
+    const res = await fetch(url, { cache: "no-store", mode: "cors" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    const prices = {};
+    (Array.isArray(data) ? data : [data]).forEach(function (d) {
+      if (d && d.symbol) prices[d.symbol] = Number(d.price);
+    });
+    return prices;
+  }
+
+  async function pollOnce() {
+    try {
+      let prices;
+      try {
+        prices = await fetchRest(PRIMARY);
+        endpointUsed = "api.binance.com";
+      } catch (e1) {
+        prices = await fetchRest(FALLBACK);
+        endpointUsed = "data-api.binance.vision";
+      }
+      mode = "rest";
+      applyPrices(prices);
+    } catch (err) {
+      console.warn("REST price poll failed, trying websocket", err);
+      setLiveStatus(false, "REST failed — trying WS");
+      startWebsocket();
+    }
+  }
+
+  let ws = null;
+  let wsBackoff = null;
+  function startWebsocket() {
+    if (ws && (ws.readyState === 0 || ws.readyState === 1)) return;
+    const streams = symbolsNeeded().map(function (s) {
+      return s.toLowerCase() + "@trade";
+    });
+    if (!streams.length) return;
+    // combined stream
+    const url = "wss://stream.binance.com:9443/stream?streams=" + streams.join("/");
+    try {
+      ws = new WebSocket(url);
+    } catch (e) {
+      setLiveStatus(false, "WS blocked");
+      // keep trying REST
+      return;
+    }
+    mode = "ws";
+    endpointUsed = "stream.binance.com";
+    const buf = {};
+    ws.onmessage = function (ev) {
+      try {
+        const msg = JSON.parse(ev.data);
+        const d = msg.data || msg;
+        if (!d || !d.s) return;
+        buf[d.s] = Number(d.p);
+      } catch (e) {}
+    };
+    ws.onopen = function () {
+      setLiveStatus(true, "stream.binance.com · ws");
+      // flush buffer every POLL_MS
+      if (pollTimer) clearInterval(pollTimer);
+      pollTimer = setInterval(function () {
+        if (Object.keys(buf).length) {
+          applyPrices(Object.assign({}, buf));
+        }
+      }, POLL_MS);
+    };
+    ws.onerror = function () {
+      setLiveStatus(false, "WS error");
+    };
+    ws.onclose = function () {
+      setLiveStatus(false, "WS closed — REST retry");
+      if (wsBackoff) clearTimeout(wsBackoff);
+      wsBackoff = setTimeout(function () { pollOnce(); }, 2000);
+    };
+  }
+
+  // Kick off
+  pollOnce();
+  pollTimer = setInterval(pollOnce, POLL_MS);
+
+  // Soft reload every 5 minutes to pick up new scans / regenerated HTML
+  setTimeout(function () { location.reload(); }, RELOAD_MS);
+
+  // Clock tick every second for the LIVE label time
+  setInterval(function () {
+    const tick = document.getElementById("live-tick-time");
+    if (tick && document.getElementById("live-pill") &&
+        document.getElementById("live-pill").classList.contains("live-on")) {
+      // keep last successful stamp from applyPrices; also show a local clock
+      const clock = document.getElementById("live-clock");
+      if (clock) clock.textContent = lagosNow();
+    } else {
+      const clock = document.getElementById("live-clock");
+      if (clock) clock.textContent = lagosNow();
+    }
+  }, 1000);
+})();
+</script>
+
+</body>
+</html>
