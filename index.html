@@ -263,6 +263,9 @@ footer {
 .filter button { background: var(--card2); color: var(--text); border: 1px solid var(--line); border-radius: 999px;
   padding: 6px 12px; font-size: .82rem; }
 .filter button.on { border-color: var(--accent); background: #1b2a52; }
+.sb { white-space: normal; font-size: .8rem; }
+.sb th, .sb td { padding: 8px 6px; }
+.sb td:first-child { color: var(--muted); }
 
 </style>
 </head>
@@ -271,11 +274,11 @@ footer {
   <div class="banner">FAKE MONEY ONLY — practice trades, no profit promised</div>
   <header>
     <div><h1>Paper Trading Bot</h1>
-      <div class="subhead">Two fake wallets · Scoreboard · Growth chart · Live prices</div></div>
+      <div class="subhead">Three fake wallets · Scoreboard · Growth chart · Live prices</div></div>
     <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;">
       <div class="pill live-off" id="live-pill"><span class="dot"></span><strong>LIVE</strong>
         <span id="live-tick-time">connecting…</span></div>
-      <div class="pill"><span class="dot" style="animation:none;background:var(--accent)"></span> Last scan: Nov 09, 13:37 Lagos</div>
+      <div class="pill"><span class="dot" style="animation:none;background:var(--accent)"></span> Last scan: Nov 09, 13:43 Lagos</div>
     </div>
   </header>
 
@@ -291,26 +294,26 @@ footer {
 <div class="card wcard meme">
   <h3><span class="swatch" style="background:#c084fc"></span>Meme coins</h3>
   <div class="label">Live fake equity</div>
-  <div class="big-num" id="eq-meme">$1,010.20</div>
+  <div class="big-num" id="eq-meme">$1,010.21</div>
   <div class="kv">
     <span>Return</span><span id="ret-meme" class="pos">+1.02%</span>
     <span>Unrealized (if sold now)</span><span id="un-meme">—</span>
-    <span>Open trades value</span><span id="ov-meme">$419.62</span>
-    <span>Cash (free)</span><span>$590.58</span>
-    <span>Realized P/L (net)</span><span class="pos">+$11.55</span>
-    <span>Win rate</span><span>100%</span>
-    <span>Open / closed</span><span>6 / 3</span>
+    <span>Open trades value</span><span id="ov-meme">$346.97</span>
+    <span>Cash (free)</span><span>$663.24</span>
+    <span>Realized P/L (net)</span><span class="pos">+$11.30</span>
+    <span>Win rate</span><span>75%</span>
+    <span>Open / closed</span><span>5 / 4</span>
     <span>Started with</span><span>$1,000.00</span>
   </div>
 </div>
 <div class="card wcard big">
   <h3><span class="swatch" style="background:#5b8cff"></span>Big coins</h3>
   <div class="label">Live fake equity</div>
-  <div class="big-num" id="eq-big">$1,001.00</div>
+  <div class="big-num" id="eq-big">$1,001.01</div>
   <div class="kv">
     <span>Return</span><span id="ret-big" class="pos">+0.10%</span>
     <span>Unrealized (if sold now)</span><span id="un-big">—</span>
-    <span>Open trades value</span><span id="ov-big">$152.18</span>
+    <span>Open trades value</span><span id="ov-big">$152.19</span>
     <span>Cash (free)</span><span>$848.82</span>
     <span>Realized P/L (net)</span><span class="muted">$0.00</span>
     <span>Win rate</span><span>—</span>
@@ -318,30 +321,45 @@ footer {
     <span>Started with</span><span>$1,000.00</span>
   </div>
 </div>
-<div class="card wcard total">
-  <h3><span class="swatch" style="background:#22d3a6"></span>Combined (both)</h3>
+<div class="card wcard stocks">
+  <h3><span class="swatch" style="background:#f472b6"></span>Stocks</h3>
   <div class="label">Live fake equity</div>
-  <div class="big-num" id="eq-total">$2,011.20</div>
+  <div class="big-num" id="eq-stocks">$1,000.00</div>
   <div class="kv">
-    <span>Return</span><span id="ret-total" class="pos">+0.56%</span>
+    <span>Return</span><span id="ret-stocks" class="muted">+0.00%</span>
+    <span>Unrealized (if sold now)</span><span id="un-stocks">—</span>
+    <span>Open trades value</span><span id="ov-stocks">$0.00</span>
+    <span>Cash (free)</span><span>$1,000.00</span>
+    <span>Realized P/L (net)</span><span class="muted">$0.00</span>
+    <span>Win rate</span><span>—</span>
+    <span>Open / closed</span><span>0 / 0</span>
+    <span>Started with</span><span>$1,000.00</span>
+  </div>
+</div>
+<div class="card wcard total">
+  <h3><span class="swatch" style="background:#22d3a6"></span>Combined (all 3)</h3>
+  <div class="label">Live fake equity</div>
+  <div class="big-num" id="eq-total">$3,011.22</div>
+  <div class="kv">
+    <span>Return</span><span id="ret-total" class="pos">+0.37%</span>
     <span>Unrealized (if sold now)</span><span id="un-total">—</span>
-    <span>Open trades value</span><span id="ov-total">$571.80</span>
-    <span>Cash (free)</span><span>$1,439.40</span>
-    <span>Realized P/L (net)</span><span class="pos">+$11.55</span>
-    <span>Win rate</span><span>100%</span>
-    <span>Open / closed</span><span>8 / 3</span>
-    <span>Started with</span><span>$2,000.00</span>
+    <span>Open trades value</span><span id="ov-total">$499.16</span>
+    <span>Cash (free)</span><span>$2,512.06</span>
+    <span>Realized P/L (net)</span><span class="pos">+$11.30</span>
+    <span>Win rate</span><span>75%</span>
+    <span>Open / closed</span><span>7 / 4</span>
+    <span>Started with</span><span>$3,000.00</span>
   </div>
 </div></div>
 
   <section class="section">
     <h2>Last scan alerts</h2>
-    <div class="alerts"><ul style="margin:0;padding-left:18px"><li>CLOSED #5 NEIRO (Meme coins wallet): TAKE-PROFIT hit — net P/L $+0.56 (+0.74%). Fake money.</li><li>CLOSED #8 DOGE (Meme coins wallet): TAKE-PROFIT hit — net P/L $+0.80 (+1.46%). Fake money.</li><li>OPENED #10 NEIRO (Meme coins wallet): fake buy of $72.91 at 0.0000597994. Why: Volume jumped to 17.1x its normal level; no bad news found (no matching headlines); price 0.00005968 was 0.318% above support at 0.00005949. Safety exit (stop-loss) 0.00005789 (-3.0%), target (take-profit) 0.00005969 (+0.0%).</li><li>OPENED #11 INIT (Meme coins wallet): fake buy of $65.62 at 0.12313578. Why: Volume jumped to 4.01x its normal level; no bad news found (no matching headlines); price 0.12289 was 0.212% above support at 0.12263. Safety exit (stop-loss) 0.1192033 (-3.0%), target (take-profit) 0.12698 (+3.3%).</li></ul></div>
+    <div class="alerts"><ul style="margin:0;padding-left:18px"><li>CLOSED #10 NEIRO (Meme coins wallet): TAKE-PROFIT hit — net P/L $-0.25 (-0.35%). Fake money.</li></ul></div>
   </section>
 
   <section class="section">
     <h2>Scoreboard</h2>
-    <div class='sb-wrap'><table class='sb'><thead><tr><th>Stat</th><th class='num'>Meme coins</th><th class='num'>Big coins</th><th class='num'>Combined</th></tr></thead><tbody><tr><td>Win rate</td><td class='num'>100.0%</td><td class='num'>—</td><td class='num'>100.0%</td></tr><tr><td>Wins</td><td class='num'>3</td><td class='num'>0</td><td class='num'>3</td></tr><tr><td>Losses</td><td class='num'>0</td><td class='num'>0</td><td class='num'>0</td></tr><tr><td>Average win</td><td class='num'>+$3.85</td><td class='num'>—</td><td class='num'>+$3.85</td></tr><tr><td>Average loss</td><td class='num'>—</td><td class='num'>—</td><td class='num'>—</td></tr><tr><td>Profit factor</td><td class='num'>∞ (no losses yet)</td><td class='num'>—</td><td class='num'>∞ (no losses yet)</td></tr><tr><td>Max drawdown</td><td class='num'>$0.00 (0.00%)</td><td class='num'>$0.00 (0.00%)</td><td class='num'>$0.00 (0.00%)</td></tr><tr><td>Total fees paid</td><td class='num'>+$0.14</td><td class='num'>$0.00</td><td class='num'>+$0.14</td></tr><tr><td>Realized P/L (net)</td><td class='num'>+$11.55</td><td class='num'>$0.00</td><td class='num'>+$11.55</td></tr></tbody></table></div><div class='sb-help'><b>Win rate</b> = share of closed trades that made money. <b>Profit factor</b> = money won ÷ money lost (above 1.0 is good; needs many trades to mean anything). <b>Max drawdown</b> = biggest drop from a high point in the wallet — the scariest moment so far. A handful of trades is NOT enough to judge the bot; aim for 30+ closed trades.</div>
+    <div class='sb-wrap'><table class='sb'><thead><tr><th>Stat</th><th class='num'>Meme coins</th><th class='num'>Big coins</th><th class='num'>Stocks</th><th class='num'>Combined</th></tr></thead><tbody><tr><td>Win rate</td><td class='num'>75.0%</td><td class='num'>—</td><td class='num'>—</td><td class='num'>75.0%</td></tr><tr><td>Wins</td><td class='num'>3</td><td class='num'>0</td><td class='num'>0</td><td class='num'>3</td></tr><tr><td>Losses</td><td class='num'>1</td><td class='num'>0</td><td class='num'>0</td><td class='num'>1</td></tr><tr><td>Average win</td><td class='num'>+$3.85</td><td class='num'>—</td><td class='num'>—</td><td class='num'>+$3.85</td></tr><tr><td>Average loss</td><td class='num'>-$0.25</td><td class='num'>—</td><td class='num'>—</td><td class='num'>-$0.25</td></tr><tr><td>Profit factor</td><td class='num'>46.20</td><td class='num'>—</td><td class='num'>—</td><td class='num'>46.20</td></tr><tr><td>Max drawdown</td><td class='num'>$0.00 (0.00%)</td><td class='num'>$0.00 (0.00%)</td><td class='num'>$0.00 (0.00%)</td><td class='num'>$0.00 (0.00%)</td></tr><tr><td>Total fees paid</td><td class='num'>$0.21</td><td class='num'>$0.00</td><td class='num'>$0.00</td><td class='num'>$0.21</td></tr><tr><td>Realized P/L (net)</td><td class='num'>+$11.30</td><td class='num'>$0.00</td><td class='num'>$0.00</td><td class='num'>+$11.30</td></tr></tbody></table></div><div class='sb-help'><b>Win rate</b> = share of closed trades that made money. <b>Profit factor</b> = money won ÷ money lost (above 1.0 is good; needs many trades to mean anything). <b>Max drawdown</b> = biggest drop from a high point in the wallet — the scariest moment so far. A handful of trades is NOT enough to judge the bot; aim for 30+ closed trades.</div>
   </section>
 
   <section class="section">
@@ -349,18 +367,19 @@ footer {
     <div class="card chart-card">
       <div class="chart-legend"><span><i style="background:#c084fc"></i>Meme coins</span>
         <span><i style="background:#5b8cff"></i>Big coins</span>
+        <span><i style="background:#f472b6"></i>Stocks</span>
         <span><i style="background:#f5a524"></i>Start ($1,000 each)</span>
         <span>Hollow dot = live now</span></div>
-      <svg id="equity-chart" viewBox="0 0 640 280" role="img" aria-label="Wallet growth chart"></svg>
+      <svg id="equity-chart" viewBox="0 0 640 300" role="img" aria-label="Wallet growth chart"></svg>
     </div>
   </section>
 
-  <div class="note">0.1% fee each way + slippage (0.05% big coins, 0.2% meme/small) on trades opened since Nov 09, 13:33 Lagos. Older trades had no fees. Prices refresh about every 3 seconds; page reloads every 5 minutes.
+  <div class="note">0.1% fee each way + slippage (0.05% big coins, 0.2% meme/small) on trades opened since Nov 09, 13:33 Lagos. Older trades had no fees. Stocks: ~0.1% per side (fee + slippage). Stocks: no trades opened or closed — US market closed (opens 9:30–16:00 New York; now 07:42 New York). Prices shown are the last close. Prices refresh about every 3 seconds; page reloads every 5 minutes.
     <div class="live-meta">Source: <span id="live-endpoint">—</span> · Clock: <span id="live-clock">—</span></div></div>
 
   <section class="section">
     <h2>Open fake trades (live)</h2>
-    <div class="filter" data-target="open-trades"><button class="on" data-f="all">All</button><button data-f="meme">Meme coins</button><button data-f="big">Big coins</button></div>
+    <div class="filter" data-target="open-trades"><button class="on" data-f="all">All</button><button data-f="meme">Meme coins</button><button data-f="big">Big coins</button><button data-f="stocks">Stocks</button></div>
     <div class="trades" id="open-trades">
 <div class="tcard" data-trade-id="2" data-wallet="big">
   <div class="top">
@@ -381,6 +400,7 @@ footer {
     <div class="prog-markers"><span class="m-sl">SL</span><span class="m-entry">E</span><span class="m-tp">TP</span></div>
   </div><div class="prog-label sub">—</div></div>
   <div class="hit-flag"></div>
+  
   <div class="why"><b>Why I took this trade:</b> Opened before notes were added<div class="sub">Old bot log: vol_ratio=3.94x; news=neutral (no news); support=4050.516; meme=False</div></div>
 </div>
 <div class="tcard" data-trade-id="3" data-wallet="meme">
@@ -402,6 +422,7 @@ footer {
     <div class="prog-markers"><span class="m-sl">SL</span><span class="m-entry">E</span><span class="m-tp">TP</span></div>
   </div><div class="prog-label sub">—</div></div>
   <div class="hit-flag"></div>
+  
   <div class="why"><b>Why I took this trade:</b> Opened before notes were added<div class="sub">Old bot log: vol_ratio=3.1x; news=neutral (no news); support=0.6308; meme=False</div></div>
 </div>
 <div class="tcard" data-trade-id="4" data-wallet="meme">
@@ -423,6 +444,7 @@ footer {
     <div class="prog-markers"><span class="m-sl">SL</span><span class="m-entry">E</span><span class="m-tp">TP</span></div>
   </div><div class="prog-label sub">—</div></div>
   <div class="hit-flag"></div>
+  
   <div class="why"><b>Why I took this trade:</b> Opened before notes were added<div class="sub">Old bot log: vol_ratio=39.63x; news=neutral (no news); support=0.1534; meme=False</div></div>
 </div>
 <div class="tcard" data-trade-id="6" data-wallet="meme">
@@ -444,6 +466,7 @@ footer {
     <div class="prog-markers"><span class="m-sl">SL</span><span class="m-entry">E</span><span class="m-tp">TP</span></div>
   </div><div class="prog-label sub">—</div></div>
   <div class="hit-flag"></div>
+  
   <div class="why"><b>Why I took this trade:</b> Opened before notes were added<div class="sub">Old bot log: vol_ratio=7.89x; news=neutral (no news); support=4.76; meme=False</div></div>
 </div>
 <div class="tcard" data-trade-id="7" data-wallet="big">
@@ -465,6 +488,7 @@ footer {
     <div class="prog-markers"><span class="m-sl">SL</span><span class="m-entry">E</span><span class="m-tp">TP</span></div>
   </div><div class="prog-label sub">—</div></div>
   <div class="hit-flag"></div>
+  
   <div class="why"><b>Why I took this trade:</b> Opened before notes were added<div class="sub">Old bot log: vol_ratio=5.96x; news=neutral; support=2083.1; meme=False</div></div>
 </div>
 <div class="tcard" data-trade-id="9" data-wallet="meme">
@@ -486,28 +510,8 @@ footer {
     <div class="prog-markers"><span class="m-sl">SL</span><span class="m-entry">E</span><span class="m-tp">TP</span></div>
   </div><div class="prog-label sub">—</div></div>
   <div class="hit-flag"></div>
+  
   <div class="why"><b>Why I took this trade:</b> Opened before notes were added<div class="sub">Old bot log: vol_ratio=3.95x; news=neutral (no news); support=5.01e-06; meme=True</div></div>
-</div>
-<div class="tcard" data-trade-id="10" data-wallet="meme">
-  <div class="top">
-    <div><div class="coin">NEIRO <span class="sub">#10</span></div>
-      <span class="badge wallet-meme">Meme coins</span> <span class="badge fees">fees + 0.20% slip</span>
-      <div class="sub">Opened Nov 09, 13:36 Lagos</div></div>
-    <div class="pnl-box"><div class="pnl-usd muted">—</div><div class="pnl-pct sub">waiting for live price…</div></div>
-  </div>
-  <div class="grid3">
-    <div><span>Entry</span>0.0000597994</div>
-    <div><span>Live</span><b class="live-price" data-role="live">—</b></div>
-    <div><span>Size</span>$72.91</div>
-    <div><span>Stop-loss</span><b class="neg">0.00005789</b></div>
-    <div><span>Take-profit</span><b class="pos">0.00005969</b></div>
-    <div><span>Fee paid</span>$0.07</div>
-  </div>
-  <div class="progress-cell"><div class="prog-wrap"><div class="prog-bar" style="width:0%"></div>
-    <div class="prog-markers"><span class="m-sl">SL</span><span class="m-entry">E</span><span class="m-tp">TP</span></div>
-  </div><div class="prog-label sub">—</div></div>
-  <div class="hit-flag"></div>
-  <div class="why"><b>Why I took this trade:</b> Volume jumped to 17.1x its normal level; no bad news found (no matching headlines); price 0.00005968 was 0.318% above support at 0.00005949. Safety exit (stop-loss) 0.00005789 (-3.0%), target (take-profit) 0.00005969 (+0.0%).</div>
 </div>
 <div class="tcard" data-trade-id="11" data-wallet="meme">
   <div class="top">
@@ -528,14 +532,31 @@ footer {
     <div class="prog-markers"><span class="m-sl">SL</span><span class="m-entry">E</span><span class="m-tp">TP</span></div>
   </div><div class="prog-label sub">—</div></div>
   <div class="hit-flag"></div>
+  
   <div class="why"><b>Why I took this trade:</b> Volume jumped to 4.01x its normal level; no bad news found (no matching headlines); price 0.12289 was 0.212% above support at 0.12263. Safety exit (stop-loss) 0.1192033 (-3.0%), target (take-profit) 0.12698 (+3.3%).</div>
 </div></div>
   </section>
 
   <section class="section">
     <h2>Closed fake trades</h2>
-    <div class="filter" data-target="closed-trades"><button class="on" data-f="all">All</button><button data-f="meme">Meme coins</button><button data-f="big">Big coins</button></div>
+    <div class="filter" data-target="closed-trades"><button class="on" data-f="all">All</button><button data-f="meme">Meme coins</button><button data-f="big">Big coins</button><button data-f="stocks">Stocks</button></div>
     <div class="trades" id="closed-trades">
+<div class="tcard" data-wallet="meme">
+  <div class="top">
+    <div><div class="coin">🎯 NEIRO <span class="sub">#10</span></div>
+      <span class="badge wallet-meme">Meme coins</span> <span class="badge fees">fees + 0.20% slip</span>
+      <div class="sub">Closed Nov 09, 13:42 Lagos</div></div>
+    <div class="pnl-box"><div class="pnl-usd neg">-$0.25</div>
+      <div class="pnl-pct sub">-0.35% net</div></div>
+  </div>
+  <div class="grid3">
+    <div><span>Entry</span>0.0000597994</div>
+    <div><span>Exit</span>0.0000597103</div>
+    <div><span>Fees</span>$0.15</div>
+  </div>
+  <div class="why exitnote"><b>Why it closed:</b> Take-profit hit: price reached 0.00005983 (target was 0.00005969). Net P/L after fees: $-0.25.</div>
+  <div class="why"><b>Why I took this trade:</b> Volume jumped to 17.1x its normal level; no bad news found (no matching headlines); price 0.00005968 was 0.318% above support at 0.00005949. Safety exit (stop-loss) 0.00005789 (-3.0%), target (take-profit) 0.00005969 (+0.0%).</div>
+</div>
 <div class="tcard" data-wallet="meme">
   <div class="top">
     <div><div class="coin">🎯 NEIRO <span class="sub">#5</span></div>
@@ -588,7 +609,7 @@ footer {
 
   <section class="section card">
     <h2>How the last scan narrowed down</h2>
-    <div class="funnel"><div class="funnel-row"><div class="funnel-step">Step 1</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:100%"><span class="funnel-num">282</span></div></div><div class="funnel-meta"><strong>Liquid USDT pairs</strong><span>Above the $500k volume floor</span></div></div><div class="funnel-row"><div class="funnel-step">Step 2</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:21%"><span class="funnel-num">60</span></div></div><div class="funnel-meta"><strong>Deep-scanned</strong><span>Top 60 by liquidity</span></div></div><div class="funnel-row"><div class="funnel-step">Step 3</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:18%"><span class="funnel-num">47</span></div></div><div class="funnel-meta"><strong>Volume spikes</strong><span>≥ 1.8× recent average</span></div></div><div class="funnel-row"><div class="funnel-step">Step 4</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:18%"><span class="funnel-num">5</span></div></div><div class="funnel-meta"><strong>Memes deep-scanned</strong><span>DOGE, SHIB, PEPE-style tagged</span></div></div><div class="funnel-row"><div class="funnel-step">Step 5</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:18%"><span class="funnel-num">2</span></div></div><div class="funnel-meta"><strong>Fake trades opened</strong><span>Spike + news OK + near support</span></div></div></div>
+    <div class="funnel"><div class="funnel-row"><div class="funnel-step">Step 1</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:100%"><span class="funnel-num">283</span></div></div><div class="funnel-meta"><strong>Liquid USDT pairs</strong><span>Above the $500k volume floor</span></div></div><div class="funnel-row"><div class="funnel-step">Step 2</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:21%"><span class="funnel-num">60</span></div></div><div class="funnel-meta"><strong>Deep-scanned</strong><span>Top 60 by liquidity</span></div></div><div class="funnel-row"><div class="funnel-step">Step 3</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:18%"><span class="funnel-num">47</span></div></div><div class="funnel-meta"><strong>Volume spikes</strong><span>≥ 1.8× recent average</span></div></div><div class="funnel-row"><div class="funnel-step">Step 4</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:18%"><span class="funnel-num">5</span></div></div><div class="funnel-meta"><strong>Memes deep-scanned</strong><span>DOGE, SHIB, PEPE-style tagged</span></div></div><div class="funnel-row"><div class="funnel-step">Step 5</div><div class="funnel-bar-wrap"><div class="funnel-bar" style="width:18%"><span class="funnel-num">0</span></div></div><div class="funnel-meta"><strong>Fake trades opened</strong><span>Spike + news OK + near support</span></div></div></div>
   </section>
 
   <section class="section">
@@ -600,7 +621,8 @@ footer {
         <li><strong>News not bad</strong> — free headlines are checked; bad news (hack, ban, crash…) means skip.</li>
         <li><strong>Near support</strong> — price is sitting just above a recent low point.</li>
       </ol>
-      <p style="margin-top:10px">There are <strong>two separate fake wallets</strong> of $1,000 each:
+      <p style="margin-top:10px">There are <strong>three separate fake wallets</strong> of $1,000 each:
+        <strong>Stocks</strong> (big US stocks and ETFs like SPY, QQQ, AAPL, NVDA — trades only while the US market is open, 9:30–16:00 New York time),
         <strong>Big coins</strong> (BTC, ETH, SOL, BNB, XRP and other large coins) and
         <strong>Meme coins</strong> (meme + small coins). Each trade uses about
         <strong>10%</strong> of that wallet's free cash, with a stop-loss about
@@ -611,14 +633,14 @@ footer {
 
   <footer>Fake money only. Live prices from public Binance market data. Times in Africa/Lagos.</footer>
 </div>
-<script>window.__DATA__ = {"start":1000.0,"fee":0.001,"wallets":{"meme":{"name":"Meme coins","cash":590.58},"big":{"name":"Big coins","cash":848.82}},"open":[{"id":"2","wallet":"big","symbol":"PAXG/USDT","base":"PAXG","binance":"PAXGUSDT","entry":4083.41,"sl":3960.9077,"tp":4123.68,"qty":0.0220404,"notional":90.0,"fee_model":"none","slip":0.0},{"id":"3","wallet":"meme","symbol":"ASTER/USDT","base":"ASTER","binance":"ASTERUSDT","entry":0.6326,"sl":0.613622,"tp":0.6499,"qty":128.04299715,"notional":81.0,"fee_model":"none","slip":0.0},{"id":"4","wallet":"meme","symbol":"NXPC/USDT","base":"NXPC","binance":"NXPCUSDT","entry":0.1538,"sl":0.149186,"tp":0.15413333,"qty":545.64369311,"notional":83.92,"fee_model":"none","slip":0.0},{"id":"6","wallet":"meme","symbol":"BNCB/USDT","base":"BNCB","binance":"BNCBUSDT","entry":4.77,"sl":4.6269,"tp":4.81,"qty":14.24947589,"notional":67.97,"fee_model":"none","slip":0.0},{"id":"7","wallet":"big","symbol":"ETH/USDT","base":"ETH","binance":"ETHUSDT","entry":2107.16,"sl":2043.9452,"tp":2128.4,"qty":0.02903434,"notional":61.18,"fee_model":"none","slip":0.0},{"id":"9","wallet":"meme","symbol":"PEPE/USDT","base":"PEPE","binance":"PEPEUSDT","entry":5.06e-06,"sl":4.91e-06,"tp":5.11e-06,"qty":9792490.11857707,"notional":49.55,"fee_model":"none","slip":0.0},{"id":"10","wallet":"meme","symbol":"NEIRO/USDT","base":"NEIRO","binance":"NEIROUSDT","entry":5.979936e-05,"sl":5.789e-05,"tp":5.969e-05,"qty":1218024.57417604,"notional":72.91,"fee_model":"fees_v1","slip":0.002},{"id":"11","wallet":"meme","symbol":"INIT/USDT","base":"INIT","binance":"INITUSDT","entry":0.12313578,"sl":0.1192033,"tp":0.12698,"qty":532.37474924,"notional":65.62,"fee_model":"fees_v1","slip":0.002}],"equity":[{"t":1794212340000,"meme":1000.0,"big":1000.0,"total":2000.0},{"t":1794227820000,"meme":1010.2,"big":1001.0,"total":2011.2}]};</script>
+<script>window.__DATA__ = {"start":1000.0,"fee":0.001,"wallets":{"meme":{"name":"Meme coins","cash":663.24},"big":{"name":"Big coins","cash":848.82},"stocks":{"name":"Stocks","cash":1000.0}},"open":[{"id":"2","wallet":"big","symbol":"PAXG/USDT","base":"PAXG","binance":"PAXGUSDT","last":4105.04,"entry":4083.41,"sl":3960.9077,"tp":4123.68,"qty":0.0220404,"notional":90.0,"fee_model":"none","slip":0.0},{"id":"3","wallet":"meme","symbol":"ASTER/USDT","base":"ASTER","binance":"ASTERUSDT","last":0.6413,"entry":0.6326,"sl":0.613622,"tp":0.6499,"qty":128.04299715,"notional":81.0,"fee_model":"none","slip":0.0},{"id":"4","wallet":"meme","symbol":"NXPC/USDT","base":"NXPC","binance":"NXPCUSDT","last":0.1492,"entry":0.1538,"sl":0.149186,"tp":0.15413333,"qty":545.64369311,"notional":83.92,"fee_model":"none","slip":0.0},{"id":"6","wallet":"meme","symbol":"BNCB/USDT","base":"BNCB","binance":"BNCBUSDT","last":4.79,"entry":4.77,"sl":4.6269,"tp":4.81,"qty":14.24947589,"notional":67.97,"fee_model":"none","slip":0.0},{"id":"7","wallet":"big","symbol":"ETH/USDT","base":"ETH","binance":"ETHUSDT","last":2125.64,"entry":2107.16,"sl":2043.9452,"tp":2128.4,"qty":0.02903434,"notional":61.18,"fee_model":"none","slip":0.0},{"id":"9","wallet":"meme","symbol":"PEPE/USDT","base":"PEPE","binance":"PEPEUSDT","last":5.09e-06,"entry":5.06e-06,"sl":4.91e-06,"tp":5.11e-06,"qty":9792490.11857707,"notional":49.55,"fee_model":"none","slip":0.0},{"id":"11","wallet":"meme","symbol":"INIT/USDT","base":"INIT","binance":"INITUSDT","last":0.12311,"entry":0.12313578,"sl":0.1192033,"tp":0.12698,"qty":532.37474924,"notional":65.62,"fee_model":"fees_v1","slip":0.002}],"equity":[{"t":1794212340000,"meme":1000.0,"big":1000.0,"stocks":null,"total":2000.0},{"t":1794227820000,"meme":1010.2,"big":1001.0,"stocks":null,"total":2011.2},{"t":1794228181000,"meme":1010.21,"big":1001.01,"stocks":1000.0,"total":3011.22}],"stock_note":"Stocks: no trades opened or closed \u2014 US market closed (opens 9:30\u201316:00 New York; now 07:42 New York). Prices shown are the last close."};</script>
 <script>
 (function () {
   "use strict";
   var D = window.__DATA__ || {};
   var trades = D.open || [];
-  var WALLETS = ["meme", "big"];
-  var COLORS = { meme: "#c084fc", big: "#5b8cff", total: "#22d3a6" };
+  var WALLETS = Object.keys(D.wallets || { meme: 1, big: 1 });
+  var COLORS = { meme: "#c084fc", big: "#5b8cff", stocks: "#f472b6", total: "#22d3a6" };
   var TICKER = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "DOGEUSDT", "PEPEUSDT"];
   var PRIMARY = "https://api.binance.com/api/v3/ticker/price";
   var FALLBACK = "https://data-api.binance.vision/api/v3/ticker/price";
@@ -693,6 +715,7 @@ footer {
     var liveEl = card.querySelector('[data-role="live"]');
     var prev = lastPrices[t.binance];
     if (liveEl) {
+      if (!t.binance) prev = null;
       liveEl.textContent = fmtPrice(price);
       if (prev != null && price !== prev) {
         var up = price > prev;
@@ -760,9 +783,11 @@ footer {
   var liveEquity = null;
 
   function applyPrices(prices) {
-    var openVal = { meme: 0, big: 0 }, openCost = { meme: 0, big: 0 };
+    var openVal = {}, openCost = {};
+    WALLETS.forEach(function (w) { openVal[w] = 0; openCost[w] = 0; });
     trades.forEach(function (t) {
-      var p = prices[t.binance];
+      var p = t.binance ? prices[t.binance] : t.last;
+      if (!(t.wallet in openVal)) { openVal[t.wallet] = 0; openCost[t.wallet] = 0; }
       var v = (p == null) ? t.notional : updateTradeCard(t, p);
       openVal[t.wallet] += v;
       openCost[t.wallet] += t.notional;
@@ -802,8 +827,13 @@ footer {
     var svg = document.getElementById("equity-chart");
     if (!svg) return;
     var pts = (D.equity || []).slice();
-    if (liveEquity) pts.push({ t: Date.now(), meme: liveEquity.meme, big: liveEquity.big, live: true });
-    var W = 640, H = 280, L = 58, R = 14, T = 14, B = 34;
+    if (liveEquity) {
+      var lp = { t: Date.now(), live: true };
+      WALLETS.forEach(function (w) { lp[w] = liveEquity[w]; });
+      pts.push(lp);
+    }
+    function ok(v) { return typeof v === "number" && isFinite(v); }
+    var W = 640, H = 300, L = 70, R = 14, T = 14, B = 40;
     var ns = "http://www.w3.org/2000/svg";
     while (svg.firstChild) svg.removeChild(svg.firstChild);
     svg.setAttribute("viewBox", "0 0 " + W + " " + H);
@@ -819,7 +849,7 @@ footer {
       return;
     }
     var ys = [START];
-    pts.forEach(function (p) { WALLETS.forEach(function (w) { if (isFinite(p[w])) ys.push(p[w]); }); });
+    pts.forEach(function (p) { WALLETS.forEach(function (w) { if (ok(p[w])) ys.push(p[w]); }); });
     var ymin = Math.min.apply(null, ys), ymax = Math.max.apply(null, ys);
     var pad = Math.max((ymax - ymin) * 0.15, 5);
     ymin -= pad; ymax += pad;
@@ -831,24 +861,25 @@ footer {
     for (var i = 0; i <= 4; i++) {
       var v = ymin + (ymax - ymin) * i / 4, y = Y(v);
       el("line", { x1: L, x2: W - R, y1: y, y2: y, stroke: "#243049", "stroke-width": 1 });
-      el("text", { x: L - 6, y: y + 4, fill: "#93a0b8", "text-anchor": "end", "font-size": 11 }, "$" + v.toFixed(0));
+      el("text", { x: L - 6, y: y + 4, fill: "#93a0b8", "text-anchor": "end", "font-size": 17 }, "$" + v.toFixed(0));
     }
     var yb = Y(START);
     el("line", { x1: L, x2: W - R, y1: yb, y2: yb, stroke: "#f5a524", "stroke-width": 1, "stroke-dasharray": "4 4", opacity: 0.7 });
-    el("text", { x: W - R, y: yb - 4, fill: "#f5a524", "text-anchor": "end", "font-size": 10 }, "start $" + START.toFixed(0));
-    el("text", { x: L, y: H - 10, fill: "#93a0b8", "font-size": 11 }, lagosFmt(new Date(tmin)));
-    el("text", { x: W - R, y: H - 10, fill: "#93a0b8", "font-size": 11, "text-anchor": "end" },
+    el("text", { x: W - R, y: yb - 4, fill: "#f5a524", "text-anchor": "end", "font-size": 15 }, "start $" + START.toFixed(0));
+    el("text", { x: L, y: H - 10, fill: "#93a0b8", "font-size": 17 }, lagosFmt(new Date(tmin)));
+    el("text", { x: W - R, y: H - 10, fill: "#93a0b8", "font-size": 17, "text-anchor": "end" },
       (pts[pts.length - 1].live ? "now " : "") + lagosFmt(new Date(tmax)) + " Lagos");
 
     WALLETS.forEach(function (w) {
       var d = "";
       pts.forEach(function (p, j) {
-        if (!isFinite(p[w])) return;
+        if (!ok(p[w])) return;
         d += (d ? " L" : "M") + X(p.t).toFixed(1) + " " + Y(p[w]).toFixed(1);
       });
+      if (!d) return;
       el("path", { d: d, fill: "none", stroke: COLORS[w], "stroke-width": 2.5, "stroke-linejoin": "round", "stroke-linecap": "round" });
       pts.forEach(function (p) {
-        if (!isFinite(p[w])) return;
+        if (!ok(p[w])) return;
         el("circle", { cx: X(p.t), cy: Y(p[w]), r: p.live ? 4.5 : 3, fill: p.live ? "#0b1220" : COLORS[w], stroke: COLORS[w], "stroke-width": 2 });
       });
     });
